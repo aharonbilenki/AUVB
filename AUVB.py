@@ -6,8 +6,19 @@ def AllpC():
     return 0
 
 #creat list of all the files in a dir.
-def DirInDir(path,DirFileList):
-    return 0
+def DirInDir(path,DirFileList,DirName):
+    count=-1
+    flist=[]
+    temp=DirFileList
+    for fname in temp:
+        count += 1
+        if fname.find('.') == False:  # if fname is a dir, we extract all the files from it
+            print(fname)
+            DirFileList = os.listdir(path + "\\" +DirName+"\\"+fname)
+            flist[count] = [fname, DirFileList]
+            temp=DirFileList
+    print(flist)
+    return flist
 def ByDir(path):
     count=-1
     flist=os.listdir(path)
@@ -15,7 +26,7 @@ def ByDir(path):
         count+=1
         if fname.find('.')==False:#if fname is a dir, we extract all the files from it
             DirFileList=os.listdir(path+"\\"+fname)
-            flist[count]=[ flist[count],DirFileList]
+            flist[count]=[ fname,DirInDir(path,DirFileList,fname)]
     return flist
 
 def creatF(path,names):
@@ -31,14 +42,18 @@ def main():
     flist=[]
     counter=-1
     WrongOption=True
-    choise=input("Hi!, we are going to make a list of all the"+'"'+"bad"+'"'+" files. \n"
-                " Chose by path or all the pc\n")
+
     while WrongOption:
+        choise = input("Hi!, we are going to make a list of all the" + '"' + "bad" + '"' + " files. \n"
+          " Chose by path or all the pc\n")
         if choise=='p':
-            path=input("Enter the path")
-            flistname=ByDir(path)
-            print(flistname)
-            WrongOption=False
+            try:
+                path=input("Enter the path")
+                flistname=ByDir(path)
+                print(flistname)
+                WrongOption=False
+            except Exception as e:
+                print(e)
         elif choise=='a':
             AllpC()
             WrongOption=False
